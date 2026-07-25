@@ -1,0 +1,6 @@
+torch==2.6.0
+torch-geometric==2.6.1
+rdkit==2026.3.3
+numpy==1.26.4
+fastapi==0.140.0
+uvicorn==0.51.0
