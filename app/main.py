@@ -27,13 +27,21 @@ button { padding: 0.4rem 0.8rem; }
 <body>
 <h1>Tox21 NR-AhR predictor</h1>
 <input id="smiles" type="text" placeholder="Enter SMILES, e.g. CCO">
-<button onclick="predict()">Predict</button>
+<button id="predictBtn" onclick="predict()">Predict</button>
 <div id="result"></div>
 <script>
 async function predict() {
   const smiles = document.getElementById("smiles").value;
+  const btn = document.getElementById("predictBtn");
   const resultEl = document.getElementById("result");
-  resultEl.textContent = "...";
+
+  btn.disabled = true;
+  resultEl.textContent = "Predicting…";
+
+  const coldStartTimer = setTimeout(() => {
+    resultEl.textContent = "Cold start — the service scales to zero when idle, this can take ~30s.";
+  }, 3000);
+
   try {
     const res = await fetch("/predict", {
       method: "POST",
@@ -48,6 +56,9 @@ async function predict() {
     resultEl.textContent = "Probability: " + data.probability.toFixed(4);
   } catch (err) {
     resultEl.textContent = "Error: request failed";
+  } finally {
+    clearTimeout(coldStartTimer);
+    btn.disabled = false;
   }
 }
 </script>
