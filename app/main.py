@@ -64,9 +64,26 @@ h1 { font-size: 1.4rem; }
 
 .controls {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: 0.5rem;
   margin: 1rem 0;
+}
+
+#exampleSelect {
+  width: 100%;
+  min-height: 44px;
+  font-size: 16px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--border-ui);
+  border-radius: 8px;
+  background: var(--surface-1);
+  color: var(--text-primary);
+}
+
+.input-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
 }
 
 #smiles {
@@ -78,6 +95,13 @@ h1 { font-size: 1.4rem; }
   border-radius: 8px;
   background: var(--surface-1);
   color: var(--text-primary);
+}
+
+.example-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 0;
+  min-height: 1.2em;
 }
 
 #predictBtn {
@@ -209,10 +233,8 @@ h1 { font-size: 1.4rem; }
 <div class="wrap">
 <h1>Tox21 predictor</h1>
 <div class="controls">
-<input id="smiles" type="text" list="smilesExamples" placeholder="Enter SMILES, e.g. CCO">
-<button id="predictBtn" onclick="predict()">Predict</button>
-</div>
-<datalist id="smilesExamples">
+<select id="exampleSelect" aria-label="Example molecule">
+<option value="" selected>Select an example molecule…</option>
 <option value="CCO">Ethanol (train)</option>
 <option value="CC(C)Cc1ccc(C(C)C(=O)O)cc1">Ibuprofen (train)</option>
 <option value="CC(=O)Oc1ccccc1C(=O)O">Aspirin (train)</option>
@@ -221,7 +243,13 @@ h1 { font-size: 1.4rem; }
 <option value="c1ccc2c(c1)ccc1ccccc12">Phenanthrene (train)</option>
 <option value="Clc1cc2c(cc1Cl)Oc1cc(Cl)c(Cl)cc1O2">TCDD / dioxin (train)</option>
 <option value="c1ccc2c(c1)cc1ccc3cccc4ccc2c1c34">Benzo[a]pyrene (train)</option>
-</datalist>
+</select>
+<div class="input-row">
+<input id="smiles" type="text" placeholder="Enter SMILES, e.g. CCO">
+<button id="predictBtn" onclick="predict()">Predict</button>
+</div>
+<p id="exampleLabel" class="example-label"></p>
+</div>
 <div id="status"></div>
 <div id="assays" class="assays"></div>
 <p id="vizNote" class="viz-note"></p>
@@ -384,6 +412,18 @@ async function predict() {
 
 document.getElementById("smiles").addEventListener("keydown", (event) => {
   if (event.key === "Enter") predict();
+});
+
+document.getElementById("exampleSelect").addEventListener("change", (event) => {
+  const option = event.target.options[event.target.selectedIndex];
+  if (!option.value) return;
+  document.getElementById("smiles").value = option.value;
+  document.getElementById("exampleLabel").textContent = "Predicting for: " + option.textContent;
+});
+
+document.getElementById("smiles").addEventListener("input", () => {
+  document.getElementById("exampleSelect").value = "";
+  document.getElementById("exampleLabel").textContent = "";
 });
 </script>
 </body>
