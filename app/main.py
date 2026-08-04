@@ -316,6 +316,11 @@ function reliabilityTier(auroc) {
   return "low";
 }
 
+function formatPercentile(p) {
+  const pct = Math.round(p * 1000) / 10;
+  return Math.min(99.9, pct).toFixed(1);
+}
+
 function renderAssays(results) {
   const assaysEl = document.getElementById("assays");
   const noteEl = document.getElementById("vizNote");
@@ -347,7 +352,7 @@ function renderAssays(results) {
 
     const pctText = document.createElement("div");
     pctText.className = "pct-text";
-    pctText.textContent = "higher than " + Math.round(r.percentile * 100) + "% of training compounds";
+    pctText.textContent = "higher than " + formatPercentile(r.percentile) + "% of training compounds";
 
     const probText = document.createElement("div");
     probText.className = "prob-text";
