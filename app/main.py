@@ -14,7 +14,7 @@ INDEX_HTML = """
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Tox21 predictor</title>
+<title>Tox21 Toxicity Predictor</title>
 <style>
 :root {
   color-scheme: light;
@@ -144,6 +144,65 @@ h1 { font-size: 1.4rem; }
 .low-rel-caption { font-size: 0.7rem; font-style: italic; color: var(--text-muted); }
 
 .viz-note { font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem; }
+
+.about {
+  margin-top: 1.5rem;
+  border: 1px solid var(--border-ui);
+  border-radius: 12px;
+  background: var(--surface-1);
+  padding: 0 0.9rem;
+}
+
+.about summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.about summary::-webkit-details-marker { display: none; }
+
+.about summary::before {
+  content: "▸";
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.about[open] summary::before { content: "▾"; }
+
+.assay-info {
+  margin: 0.25rem 0 0.75rem;
+}
+
+.assay-info dt { font-weight: 600; margin-top: 0.7rem; }
+.assay-info dt:first-child { margin-top: 0; }
+.assay-info dd {
+  margin: 0.2rem 0 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.about-note {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border-ui);
+  padding: 0.75rem 0;
+  margin: 0;
+}
+
+.site-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-ui);
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.site-footer a { color: var(--text-secondary); }
+.site-footer p { margin: 0.4rem 0 0; }
 </style>
 </head>
 <body>
@@ -166,6 +225,24 @@ h1 { font-size: 1.4rem; }
 <div id="status"></div>
 <div id="assays" class="assays"></div>
 <p id="vizNote" class="viz-note"></p>
+<details class="about">
+<summary>About the assays</summary>
+<dl class="assay-info">
+<dt>NR-AhR</dt>
+<dd>Aryl hydrocarbon receptor. Activated by planar aromatic molecules such as dioxins and polycyclic aromatic hydrocarbons.</dd>
+<dt>NR-ER</dt>
+<dd>Estrogen receptor. Associated with endocrine disruption.</dd>
+<dt>SR-ARE</dt>
+<dd>Antioxidant response element. Signals cellular oxidative stress.</dd>
+<dt>SR-MMP</dt>
+<dd>Mitochondrial membrane potential. Indicates direct mitochondrial toxicity.</dd>
+</dl>
+<p class="about-note">Training data from the Tox21 program (NIH/EPA/FDA), ~7,800 compounds. The model predicts activity in specific assays, not general toxicity.</p>
+</details>
+<footer class="site-footer">
+<a href="https://github.com/Giuliohbb/tox21-toxicity-api">github.com/Giuliohbb/tox21-toxicity-api</a>
+<p>Predictions for molecules far from the training distribution are unreliable and are not currently flagged.</p>
+</footer>
 </div>
 <script>
 function hexToRgb(hex) {
